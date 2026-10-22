@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08090c">
+  <title>COMBAT TIERS | Bedrock PvP</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <div class="logo">⚔</div>
+      <div><strong>COMBAT <span>TIERS</span></strong><small>BEDROCK COMPETITIVE</small></div>
+    </a>
 
+    <nav>
+      <a href="#tierlist">Tierlist</a>
+      <a href="#kits">Kits</a>
+      <a href="#community">Community</a>
+    </nav>
+
+    <button class="admin-button" id="adminOpen">♙ Admin Login</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">● MINECRAFT BEDROCK RANKINGS</div>
+        <h1>BUILT TO<br><span>OUTPLAY.</span></h1>
+        <p>Entdecke die besten Minecraft-Bedrock-PvP-Spieler. Finde deine Kits, vergleiche Tiers und beweise deine Skills.</p>
+        <div class="actions">
+          <a class="primary" href="#tierlist">Tierlist ansehen ↓</a>
+          <a class="secondary" id="heroDiscord" href="#community">Discord ↗</a>
+        </div>
+        <div class="stats">
+          <div><strong id="playerCount">0</strong><small>RANKED PLAYERS</small></div>
+          <div><strong id="kitCount">8</strong><small>PVP KITS</small></div>
+          <div><strong>BEDROCK</strong><small>EDITION</small></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="ring"></div>
+        <div class="crest">⚔</div>
+        <div class="floating one">🏆 <span>COMPETITIVE<br><small>SKILL OVER LUCK</small></span></div>
+        <div class="floating two">🔥 <span>EARN YOUR TIER<br><small>PROVE YOUR SKILL</small></span></div>
+      </div>
+    </section>
+
+    <section class="section" id="tierlist">
+      <div class="section-heading">
+        <div>
+          <small>01 / PLAYER RANKINGS</small>
+          <h2>THE <span>TIERLIST</span></h2>
+          <p>Offizielle Ergebnisse der eingetragenen PvP-Tests.</p>
+        </div>
+        <input id="searchInput" type="search" placeholder="Spieler suchen...">
+      </div>
+      <div class="filters" id="kitFilters"></div>
+      <div id="tierBoard" class="tier-board"></div>
+      <p id="emptyState" class="empty" hidden>Keine Spieler gefunden. Die Tierlist wird von Admins gepflegt.</p>
+    </section>
+
+    <section class="section kits-section" id="kits">
+      <div class="section-heading">
+        <div>
+          <small>02 / AVAILABLE MODES</small>
+          <h2>CHOOSE YOUR <span>KIT</span></h2>
+          <p>Jeder Modus bewertet andere PvP-Skills.</p>
+        </div>
+      </div>
+      <div id="kitGrid" class="kit-grid"></div>
+    </section>
+
+    <section class="community" id="community">
+      <div class="community-icon">✦</div>
+      <div>
+        <small>JOIN THE COMMUNITY</small>
+        <h2>FIND YOUR <span>PEOPLE.</span></h2>
+        <p>Updates, PvP-Tests und die Combat Tiers Community.</p>
+      </div>
+      <a id="discordButton" class="primary" href="#community">Discord beitreten ↗</a>
+    </section>
+  </main>
+
+  <footer>
+    <strong>COMBAT <span>TIERS</span></strong>
+    <span>UNOFFICIAL MINECRAFT BEDROCK TIERLIST</span>
+  </footer>
+
+  <div class="backdrop" id="loginModal" hidden>
+    <section class="modal">
+      <button class="close" data-close="loginModal">×</button>
+      <div class="modal-logo">⚔</div>
+      <small>RESTRICTED ACCESS</small>
+      <h2>ADMIN <span>LOGIN</span></h2>
+      <p>Logge dich ein, um Tests, Kits und den Discord-Link zu verwalten.</p>
+      <form id="loginForm">
+        <label for="adminPassword">Admin-Passwort</label>
+        <input id="adminPassword" type="password" placeholder="Passwort eingeben" required>
+        <p id="loginError" class="error"></p>
+        <button class="primary full" type="submit">Einloggen →</button>
+      </form>
+      <p class="warning">Demo-Version: Das Passwort ist im Website-Code sichtbar. Für einen öffentlichen Launch ist ein sicherer Backend-Login nötig.</p>
+    </section>
+  </div>
+
+  <div class="backdrop" id="adminModal" hidden>
+    <section class="modal admin-modal">
+      <button class="close" data-close="adminModal">×</button>
+      <small>CONTROL CENTER</small>
+      <h2>ADMIN <span>PANEL</span></h2>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="testsPanel">Tests eintragen</button>
+        <button class="tab" data-tab="kitsPanel">Kits</button>
+        <button class="tab" data-tab="sitePanel">Startseite</button>
+      </div>
+
+      <div id="testsPanel" class="tab-panel">
+        <form id="testForm" class="form-grid">
+          <label>Spielername
+            <input id="playerName" maxlength="32" placeholder="Minecraft-Name" required>
+          </label>
+          <label>Kit
+            <select id="playerKit" required></select>
+          </label>
+          <label>Tier
+            <select id="playerTier">
+              <option>HT1</option><option>LT1</option>
+              <option>HT2</option><option>LT2</option>
+              <option>HT3</option><option>LT3</option>
+              <option>HT4</option><option>LT4</option>
+              <option>HT5</option><option>LT5</option>
+            </select>
+          </label>
+          <label>Notiz (optional)
+            <input id="testNote" maxlength="100" placeholder="Tester oder Notiz">
+          </label>
+          <button class="primary" type="submit">Test speichern ＋</button>
+        </form>
+        <h3>Ergebnisse</h3>
+        <div id="adminResults" class="admin-results"></div>
+      </div>
+
+      <div id="kitsPanel" class="tab-panel" hidden>
+        <form id="kitForm" class="form-grid">
+          <label>Kit-Emoji
+            <input id="newKitEmoji" maxlength="8" placeholder="🥊" required>
+          </label>
+          <label>Kit-Name
+            <input id="newKitName" maxlength="28" placeholder="Boxing" required>
+          </label>
+          <button class="primary" type="submit">Kit hinzufügen ＋</button>
+        </form>
+        <div id="adminKits" class="admin-results"></div>
+      </div>
+
+      <div id="sitePanel" class="tab-panel" hidden>
+        <form id="siteForm" class="form-grid">
+          <label class="wide">Discord-Invite-Link
+            <input id="discordUrl" type="url" placeholder="https://discord.gg/deinserver">
+          </label>
+          <button class="primary" type="submit">Startseite aktualisieren ✓</button>
+        </form>
+      </div>
+
+      <div class="admin-footer">
+        <span>Gespeichert in diesem Browser</span>
+        <button id="logoutButton" class="text-button">Ausloggen</button>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
